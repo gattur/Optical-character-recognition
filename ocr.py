@@ -5,7 +5,7 @@
 #
 # (based on skeleton code by D. Crandall, Oct 2018)
 # Report: Enclosed in the folder
-
+#
 
 from PIL import Image, ImageDraw, ImageFont
 import sys
