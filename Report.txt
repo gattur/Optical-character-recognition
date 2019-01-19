@@ -1,0 +1,60 @@
+    
+Initial Probability    
+For P(S0=char): For storing initial probabilities
+ For this, we created a dictionary with the first character as its key and the number of times that character starts a sentence as its value.
+ The structure of the dictionary looks like:
+                   initial = {
+                                    'A':1,
+                                    ' ':5,
+                                    .
+                                    .
+                                    'z':1
+                                 }
+Thus P(S0=char) = initial[char]/sum(initial.values())
+
+Transition_probability:
+Concatenated every two characters in every line and stored the number of times of repetition in a dictionary called transition
+ The structure of the dictionary looks like:
+                   transition = {
+                                    'S,U':1,
+                                    'C,E':5,
+                                    .
+                                    .
+                                    'S,C':1
+                                 }
+
+Thus P(S1=concat) = transition[concat]/sum(transition.values())
+
+Viterbi Model:
+We use the Viterbi algorithm to predict characters
+For this we calculate:
+    a. Initial_probability : P(S0=char) given by initial divided by the number of lines.
+    b. Emmision_probability: comparing each pixel in test and training character, if the pixel is matched then according to our consideration we assume that the pixel has a 90% chance of being in its correct place with 10% noise else it has a 10% chance of being right in its place.  
+    c. Transition_probability : P(S=concat) given by transition divided by the number of transitions
+    
+To implement viterbi, we first created a dictionary s = {character:0 for each of the 72 characters}. 
+This would store the prob returned by Viterbi in the current iteration for each character. This dictionary is initialized at the start of each iteration and appended to a dictionary named possibility at the end of each iteration.
+At each iteration :  
+    for test_index in range(len(test_letters)):
+        if test_index==0
+            for train_indes in range(len(TRAIN_LETTERS)):
+                calculating v0, if the train_indes value present in the initial dictionary, v0 would be a log of initial probability and adding the log of emission probability. as the values of emission and probability are very low using a logarithmic scale. if train_indes value not present in the initial dictionary v0 would be a log of (1/number of lines) and adding the log of emission probability.
+        else
+            for train_index_inside in range(len(TRAIN_LETTERS)):
+                for train_index in range(len(TRAIN_LETTERS)):
+                     trans=TRAIN_LETTERS[train_index],TRAIN_LETTERS[train_index_inside]
+                        s[train_index] =  emmission_prob*max(possibility[test_index-1][train_index]*transition)
+            
+along with storing the possibility returned by Viterbi, I also store the character from which I got the current value. which I use to backtrack.
+
+
+Simple Model:
+     Emmision_probability: comparing each pixel in test and training character, if the pixel is matched then according to our consideration we assume that the pixel has a 90% chance of being in its correct place with 10% noise else it has a 10% chance of being right in its place.  
+    
+    calculating emission probability for each character with all the 72 characters and selecting the maximum out of all the possibilities.
+
+for the final answer calculating the maximum pattern match with the test input lines with simple and Viterbi to select the final answer.
+
+Also, my Viterbi code works much better with an increase in test-strings input as with increase better approximation can be applied with transition probability
+
+Not :Fact: for calculating transition probability instead of using test-string, if I use my cose ocr.py as test string Viterbi works better for few test inputs as it provides an increase in test strings.
